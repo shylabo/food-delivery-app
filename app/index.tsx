@@ -1,7 +1,9 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import { View, Text, SafeAreaView, Image, TextInput } from 'react-native'
+import { View, Text, SafeAreaView, Image, TextInput, ScrollView } from 'react-native'
 import React, { useLayoutEffect } from 'react'
 import { useNavigation } from 'expo-router'
+import Categories from '@/components/Categories'
+import FeaturedRow from '@/components/FeaturedRow'
 
 const home = () => {
   const navigation = useNavigation()
@@ -43,6 +45,22 @@ const home = () => {
 
         <FontAwesome name="filter" size={20} color="#00CCBB" />
       </View>
+
+      {/* Body */}
+      <ScrollView
+        className="bg-gray-100"
+        contentContainerStyle={{
+          paddingBottom: 100,
+        }}
+      >
+        {/* Categories */}
+        <Categories />
+
+        {/* Featured Rows */}
+        <FeaturedRow id="1" title="Featured" description="Paid placements from our partners" />
+        <FeaturedRow id="1" title="Featured" description="Paid placements from our partners" />
+        <FeaturedRow id="1" title="Featured" description="Paid placements from our partners" />
+      </ScrollView>
     </SafeAreaView>
   )
 }
