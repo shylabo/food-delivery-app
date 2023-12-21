@@ -1,16 +1,34 @@
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 import { View, Text, SafeAreaView, Image, TextInput, ScrollView } from 'react-native'
-import React, { useLayoutEffect } from 'react'
+import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from 'expo-router'
 import Categories from '@/components/Categories'
 import FeaturedRow from '@/components/FeaturedRow'
+import sanityClient from '@/sanity'
 
 const home = () => {
   const navigation = useNavigation()
+  const [featuredCategories, setFeaturedCategories] = useState([])
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShown: false,
+    })
+  }, [])
+
+  useEffect(() => {
+    const query = `
+        *[_type == 'featured'] {
+          ...,
+          restaurants[]-> {
+            ...,
+            dishes[]-> 
+          }
+        }
+        `
+
+    sanityClient.fetch(query).then((data) => {
+      setFeaturedCategories(data)
     })
   }, [])
 
@@ -56,10 +74,15 @@ const home = () => {
         {/* Categories */}
         <Categories />
 
-        {/* Featured Rows */}
-        <FeaturedRow id="1" title="Featured" description="Paid placements from our partners" />
-        <FeaturedRow id="1" title="Featured" description="Paid placements from our partners" />
-        <FeaturedRow id="1" title="Featured" description="Paid placements from our partners" />
+        {/* Featured */}
+        {featuredCategories?.map((category: any) => (
+          <FeaturedRow
+            key={category._id}
+            id={category._id}
+            title={category.name}
+            description={category.short_description}
+          />
+        ))}
       </ScrollView>
     </SafeAreaView>
   )

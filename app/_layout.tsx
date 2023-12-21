@@ -49,6 +49,7 @@ function RootLayoutNav() {
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
       <Stack>
         <Stack.Screen name="index" options={{ headerShown: true }} />
+        <Stack.Screen name="restaurant" options={{ headerShown: true }} />
       </Stack>
     </ThemeProvider>
   )

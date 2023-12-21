@@ -2,9 +2,11 @@ import { Image, View, Text } from 'react-native'
 import React from 'react'
 import { TouchableOpacity } from 'react-native-gesture-handler'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
+import { urlFor } from '@/sanity'
+import { useNavigation } from 'expo-router'
 
 interface RestaurantCardProps {
-  id: number
+  id: string
   imgUrl: string
   title: string
   rating: number
@@ -28,11 +30,29 @@ const RestaurantCard: React.FC<RestaurantCardProps> = ({
   long,
   lat,
 }) => {
+  const navigation = useNavigation()
   return (
-    <TouchableOpacity className="bg-white mr-3 shadow">
+    <TouchableOpacity
+      onPress={() => {
+        // @ts-ignore
+        navigation.navigate('restaurant', {
+          id,
+          imgUrl,
+          title,
+          rating,
+          genre,
+          address,
+          short_description,
+          dishes,
+          long,
+          lat,
+        })
+      }}
+      className="bg-white mr-3 shadow"
+    >
       <Image
         source={{
-          uri: imgUrl,
+          uri: urlFor(imgUrl).url(),
         }}
         className="h-36 w-64 rounded-sm"
       />
