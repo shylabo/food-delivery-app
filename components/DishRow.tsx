@@ -1,7 +1,10 @@
+import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { Image, View, Text, TouchableOpacity } from 'react-native'
 import { urlFor } from '@/sanity'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
-import React, { useState } from 'react'
-import { Image, View, Text, TouchableOpacity } from 'react-native'
+
+import { addToBasket, removeFromBasket, selectBasketItemWithId } from '@/features/basketSlice'
 
 interface DishRowProps {
   id: string
@@ -13,6 +16,8 @@ interface DishRowProps {
 
 const DishRow: React.FC<DishRowProps> = ({ id, name, description, price, image }) => {
   const [isPressed, setIsPressed] = useState(false)
+  const items = useSelector((state) => selectBasketItemWithId(state, id))
+  const dispatch = useDispatch()
 
   const formatter = new Intl.NumberFormat('en-CA', {
     style: 'currency',
@@ -20,6 +25,15 @@ const DishRow: React.FC<DishRowProps> = ({ id, name, description, price, image }
   })
 
   const formattedPrice = formatter.format(price)
+
+  const addItemToBasket = () => {
+    dispatch(addToBasket({ id, name, description, price, image }))
+  }
+
+  const removeItemFromBasket = () => {
+    if (!(items.length > 0)) return
+    dispatch(removeFromBasket({ id }))
+  }
 
   return (
     <>
@@ -51,11 +65,13 @@ const DishRow: React.FC<DishRowProps> = ({ id, name, description, price, image }
       {isPressed && (
         <View className="bg-white px-4">
           <View className="flex-row items-center space-x-2 pb-3">
-            <TouchableOpacity>
-              <FontAwesome name="minus-circle" size={32} color="#00CCBB" />
+            <TouchableOpacity onPress={removeItemFromBasket} disabled={!items.length}>
+              <FontAwesome name="minus-circle" size={32} color={items.length > 0 ? '#00CCBB' : 'gray'} />
             </TouchableOpacity>
-            <Text>0</Text>
-            <TouchableOpacity>
+
+            <Text>{items.length}</Text>
+
+            <TouchableOpacity onPress={addItemToBasket}>
               <FontAwesome name="plus-circle" size={32} color="#00CCBB" />
             </TouchableOpacity>
           </View>
