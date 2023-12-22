@@ -51,8 +51,11 @@ function RootLayoutNav() {
     <Provider store={store}>
       <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
         <Stack>
-          <Stack.Screen name="index" options={{ headerShown: true }} />
-          <Stack.Screen name="restaurant" options={{ headerShown: true }} />
+          <Stack.Screen name="index" />
+          <Stack.Screen name="restaurant" />
+          <Stack.Screen name="basket" options={{ presentation: 'modal', headerShown: false }} />
+          <Stack.Screen name="preparingOrder" options={{ presentation: 'fullScreenModal', headerShown: false }} />
+          <Stack.Screen name="delivery" options={{ presentation: 'fullScreenModal', headerShown: false }} />
         </Stack>
       </ThemeProvider>
     </Provider>

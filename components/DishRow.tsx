@@ -5,6 +5,7 @@ import { urlFor } from '@/sanity'
 import FontAwesome from '@expo/vector-icons/FontAwesome'
 
 import { addToBasket, removeFromBasket, selectBasketItemWithId } from '@/features/basketSlice'
+import { formatter } from '@/utils'
 
 interface DishRowProps {
   id: string
@@ -18,11 +19,6 @@ const DishRow: React.FC<DishRowProps> = ({ id, name, description, price, image }
   const [isPressed, setIsPressed] = useState(false)
   const items = useSelector((state) => selectBasketItemWithId(state, id))
   const dispatch = useDispatch()
-
-  const formatter = new Intl.NumberFormat('en-CA', {
-    style: 'currency',
-    currency: 'CAD',
-  })
 
   const formattedPrice = formatter.format(price)
 
